@@ -1,0 +1,48 @@
+import { describe, expect, it, beforeAll, afterAll } from "vitest";
+
+import { main } from "../src/main";
+import { ERRORS, WARN } from "../src/const";
+
+const cwd = process.cwd();
+
+it("should work", async () => {
+  expect(await main(cwd, [])).toStrictEqual([0, WARN.no_files]);
+});
+
+it("not found", async () => {
+  expect(await main(cwd, ["node", "cli.js", "foobar"])).toStrictEqual([
+    1,
+    ERRORS.file_not_found,
+  ]);
+});
+
+it("not file", async () => {
+  expect(await main(cwd, ["node", "cli.js", "test/files"])).toStrictEqual([
+    1,
+    ERRORS.file_not_found,
+  ]);
+});
+
+it("not json file", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/foobar.js"])
+  ).toStrictEqual([1, ERRORS.not_json_file]);
+});
+
+it("invalid json file", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/not-valid.json"])
+  ).toStrictEqual([1, ERRORS.not_valid_json]);
+});
+
+it("incorrect schema", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/incorrect-schema.json"])
+  ).toStrictEqual([1, ERRORS.not_match_schema]);
+});
+
+it("correct schema", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/correct-schema.json"])
+  ).toStrictEqual([0, ""]);
+});

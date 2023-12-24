@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
@@ -9,5 +9,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "vitest.config.ts"
+  ]
 }

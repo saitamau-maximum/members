@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build": "tsc",
-    "test": "vitest"
+    "test": "vitest --coverage --ui",
+    "start": "node dist/cli.js"
   },
   "dependencies": {
     "picocolors": "^1.0.0",
@@ -12,6 +13,8 @@
   "devDependencies": {
     "@types/node": "^20.10.5",
     "@types/yargs": "^17.0.32",
+    "@vitest/coverage-v8": "^1.1.0",
+    "@vitest/ui": "^1.1.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.10"
   }
