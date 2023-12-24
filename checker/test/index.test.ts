@@ -41,8 +41,43 @@ it("incorrect schema", async () => {
   ).toStrictEqual([1, ERRORS.not_match_schema]);
 });
 
+it("incorrect schema path", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/incorrect-path.json"])
+  ).toStrictEqual([1, ERRORS.not_correct_schema_path]);
+});
+
+it("filename and name not match", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/incorrect-name.json"])
+  ).toStrictEqual([1, ERRORS.name_not_match]);
+});
+
+it("invalid id", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/invalid-id.json"])
+  ).toStrictEqual([1, ERRORS.invalid_id]);
+});
+
+it("invalid grade", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/invalid-grade.json"])
+  ).toStrictEqual([1, ERRORS.invalid_grade]);
+});
+
 it("correct schema", async () => {
   expect(
     await main(cwd, ["node", "cli.js", "test/files/correct-schema.json"])
+  ).toStrictEqual([0, ""]);
+});
+
+it("multiple files", async () => {
+  expect(
+    await main(cwd, [
+      "node",
+      "cli.js",
+      "test/files/correct-schema.json",
+      "test/files/correct-schema.json",
+    ])
   ).toStrictEqual([0, ""]);
 });

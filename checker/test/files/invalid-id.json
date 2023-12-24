@@ -1,7 +1,7 @@
 {
   "$schema": "../../../members.schema.json",
-  "id": "12345",
-  "name": "correct-schema",
+  "id": "saitamau-maximum",
+  "name": "invalid-id",
   "grade": [
     "21B"
   ],

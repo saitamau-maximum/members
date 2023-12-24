@@ -33,6 +33,13 @@ export async function main(
 
   logger.debug("files", files);
   logger.debug("cwd", cwd);
+  const correctSchemaPath = resolve(
+    __filename,
+    "..",
+    "..",
+    "members.schema.json"
+  );
+  logger.debug("correctSchemaPath", correctSchemaPath);
 
   if (!files || files.length === 0) {
     logger.newline();
@@ -69,17 +76,56 @@ export async function main(
       JSON.parse(fileContent);
     } catch (error) {
       logger.error(ERRORS.not_valid_json);
-      logger.error(error);
       return [1, ERRORS.not_valid_json];
     }
 
     // Check if the file matches the schema
-    if (schema.safeParse(JSON.parse(fileContent)).success) {
-      logger.success("The file matches the schema");
-    } else {
+    const parsed = schema.safeParse(JSON.parse(fileContent));
+    if (!parsed.success) {
       logger.error(ERRORS.not_match_schema);
       return [1, ERRORS.not_match_schema];
     }
+
+    // Check if the schema is correct
+    const schemaPath = resolve(cwd, file, parsed.data.$schema);
+    logger.debug("schemaPath", schemaPath);
+
+    if (schemaPath !== correctSchemaPath) {
+      logger.error(ERRORS.not_correct_schema_path);
+      return [1, ERRORS.not_correct_schema_path];
+    }
+
+    // Check if the filename matches the name
+    if (parsed.data.name !== file.replace(".json", "").split("/").pop()) {
+      logger.error(ERRORS.name_not_match);
+      return [1, ERRORS.name_not_match];
+    }
+
+    // Check if the id is correct
+    if (!/^[1-9][0-9]+$/.test(parsed.data.id)) {
+      logger.error(ERRORS.invalid_id);
+      logger.info("hint: the id only contains numbers");
+      logger.info(
+        "  see the GitHub Settings: https://github.com/settings/emails"
+      );
+      logger.info(
+        "    and you'll find the email address like: [id]+[username]@users.noreply.github.com"
+      );
+      return [1, ERRORS.invalid_id];
+    }
+
+    // Check if the grade is correct
+    for (const grade of parsed.data.grade) {
+      if (!/^[0-9]{2}[BMD]$/.test(grade)) {
+        logger.error(ERRORS.invalid_grade, "for:", grade);
+        logger.info(
+          "hint: the grade only contains 2-digit number and B, M or D (uppercase)"
+        );
+        return [1, ERRORS.invalid_grade];
+      }
+    }
+
+    logger.success("The file matches the schema");
   }
 
   return [0, ""];

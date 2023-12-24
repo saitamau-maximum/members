@@ -1,9 +1,11 @@
 {
   "$schema": "../../../members.schema.json",
   "id": "12345",
-  "name": "correct-schema",
+  "name": "invalid-grade",
   "grade": [
-    "21B"
+    "21B",
+    "21M",
+    "21d"
   ],
   "isActive": true
 }

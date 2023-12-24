@@ -1,0 +1,9 @@
+{
+  "$schema": "../../members.schema.json",
+  "id": "12345",
+  "name": "saitamau-maximum",
+  "grade": [
+    "21B"
+  ],
+  "isActive": true
+}

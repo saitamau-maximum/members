@@ -3,6 +3,10 @@ export const ERRORS = {
   not_json_file: "The file is not a JSON file",
   not_valid_json: "The file is not valid JSON",
   not_match_schema: "The file does not match the schema",
+  not_correct_schema_path: "The file does not have the correct schema path",
+  name_not_match: "The file name does not match the name in the file",
+  invalid_id: "The id is not valid",
+  invalid_grade: "The grade is not valid",
 };
 
 export const WARN = {
