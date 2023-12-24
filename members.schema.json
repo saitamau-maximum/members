@@ -1,0 +1,33 @@
+{
+  "$id": "https://github.com/saitamau-maximum/members/blob/main/members.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Members",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "GitHub account ID (number)",
+      "type": "string"
+    },
+    "name": {
+      "description": "GitHub account user name",
+      "type": "string"
+    },
+    "grade": {
+      "description": "Grade, e.g. 21B, 23M, 24D",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "isActive": {
+      "description": "Whether the member is active or not",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "grade",
+    "isActive"
+  ]
+}
