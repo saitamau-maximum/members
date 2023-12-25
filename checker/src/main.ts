@@ -37,11 +37,12 @@ export async function main(
     __filename,
     "..",
     "..",
+    "..",
     "members.schema.json"
   );
   logger.debug("correctSchemaPath", correctSchemaPath);
 
-  const membersDir = resolve(__filename, "..", "..", "members");
+  const membersDir = resolve(__filename, "..", "..", "..", "members");
   logger.debug("membersDir", membersDir);
 
   if (!files || files.length === 0) {
