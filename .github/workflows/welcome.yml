@@ -62,13 +62,38 @@ jobs:
   send-message:
     name: Messenger
     runs-on: ubuntu-latest
-    # if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened'
+    # if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name != 'saitamau-maximum/members'
     steps:
-      - name: Create Message
+      - name: Create Message for new member
         run: |
           DELIM=$(openssl rand -hex 16)
           cat << $DELIM > msg.md
-          Hello!
+          こんにちは、 @${{ github.event.pull_request.user.login }} さん！
+          入会申請ありがとうございます！
+
+          以下のリンクが入会フォームとなります。
+          このフォームに必要事項を記入して、送信をお願いします！
+          なお、確認用の文字列として、以下の文字列を入力してください。
+
+          ```plaintext
+          ${{ github.event.pull_request.head.sha }}
+          ```
+
+          <https://forms.office.com/r/faZGt3DDDG>
+
+          また、入会フォームの送信後に、下記口座にサークル費 3,000 円をお振り込みください。
+
+          - 青木信用金庫
+          - 支店名: 埼大通支店
+          - 預金種目: 普通
+          - 口座番号: 3456237
+
+          担当者が確認後、諸手続きを行った後に Discord サーバーへの招待を行います。
+          それまでお待ちください。
+          通知を見逃さないようにお願いします！
+          (必要であれば、 [GitHub の設定](https://github.com/settings/notifications) からメールを受け取るようにしておくことをおすすめします)
+
+          以上、よろしくお願いします！
           $DELIM
       - name: Send
         run: gh pr comment -F ./msg.md "${URL}"
