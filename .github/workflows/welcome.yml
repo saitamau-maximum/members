@@ -67,7 +67,7 @@ jobs:
       - name: Create Message for new member
         run: |
           DELIM=$(openssl rand -hex 16)
-          cat << $DELIM > msg.md
+          cat << $DELIM > new_member.md
           こんにちは、 @${{ github.event.pull_request.user.login }} さん！
           入会申請ありがとうございます！
 
@@ -97,8 +97,34 @@ jobs:
           > 担当者からコメントが付くので、通知を見逃さないようにお願いします！
           > 必要であれば、 [GitHub の設定](https://github.com/settings/notifications) からメールを受け取るようにしておくことをおすすめします。
           $DELIM
+      - name: Create Message for leaders
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > leaders.md
+          @saitamau-maximum/leaders
+          新しいメンバーが入会申請を行いました。
+          以下のことを完了したら Approve をし、このプルリクエストをマージしてください。
+          上から順に行うことを想定しています。
+
+          - [ ] JSON ファイルの確認 (CI が通っているか)
+          - [ ] 入会フォームの確認
+          - [ ] GitHub への招待
+                Org -> Teams -> 年度のチーム -> Add a member
+          - [ ] Discord への招待
+                コメントで行う、有効期限は 1 day, 1 use とすべき
+          $DELIM
+      - name: Create Message for accountants
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > accountants.md
+          @saitamau-maximum/accountants
+          サークル費の振り込みが完了したことを確認したら、このプルリクエストに Approve をしてください。
+          $DELIM
       - name: Send
-        run: gh pr comment -F ./msg.md "${URL}"
+        run: |
+          gh pr comment -F ./new_member.md "${URL}"
+          gh pr comment -F ./leaders.md "${URL}"
+          gh pr comment -F ./accountants.md "${URL}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           URL: ${{ github.event.pull_request.html_url }}
