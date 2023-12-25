@@ -90,10 +90,12 @@ jobs:
 
           担当者が確認後、諸手続きを行った後に Discord サーバーへの招待を行います。
           それまでお待ちください。
-          通知を見逃さないようにお願いします！
-          (必要であれば、 [GitHub の設定](https://github.com/settings/notifications) からメールを受け取るようにしておくことをおすすめします)
 
           以上、よろしくお願いします！
+
+          > [!IMPORTANT]
+          > 担当者からコメントが付くので、通知を見逃さないようにお願いします！
+          > 必要であれば、 [GitHub の設定](https://github.com/settings/notifications) からメールを受け取るようにしておくことをおすすめします。
           $DELIM
       - name: Send
         run: gh pr comment -F ./msg.md "${URL}"
