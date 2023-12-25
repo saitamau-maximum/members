@@ -74,10 +74,9 @@ jobs:
           echo "MONTH=$REM_MONTH" >> $GITHUB_OUTPUT
           # 月 250 円、 4 月からスタート
           COST=$((250 * REM_MONTH))
-          # カンマ区切りにする
-          COST=$(printf "%'d" $COST)
-          echo "COST=$COST" >> $GITHUB_OUTPUT
-          echo $COST
+          # カンマ区切りにして出力
+          echo "COST=${printf "%'d" $COST}" >> $GITHUB_OUTPUT
+          printf "%'d" $COST
       - name: Create Message for new member
         run: |
           echo ${{ steps.cost.outputs.cost }}
@@ -91,9 +90,9 @@ jobs:
           このフォームに必要事項を記入して、送信をお願いします！
           なお、確認用の文字列として、以下の文字列を入力してください。
 
-          ```plaintext
-          $RAND
-          ```
+          \`\`\`plaintext
+          ${{ github.event.pull_request.head.sha }}
+          \`\`\`
 
           <https://forms.office.com/r/faZGt3DDDG>
 
