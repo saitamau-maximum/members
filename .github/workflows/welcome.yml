@@ -70,8 +70,8 @@ jobs:
         id: cost
         run: |
           MONTH=$(date +%m)
-          REM_MONTH=$((12 - (MONTH - 4 + 12) % 12)))
-          echo "MONTH=$MONTH" >> $GITHUB_OUTPUT
+          REM_MONTH=$((12 - (MONTH - 4 + 12) % 12))
+          echo "MONTH=$REM_MONTH" >> $GITHUB_OUTPUT
           # 月 250 円、 4 月からスタート
           COST=$((250 * REM_MONTH))
           # カンマ区切りにする
