@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync } from "fs";
-import { resolve } from "path";
+import { resolve, sep } from "path";
 
 import picocolors from "picocolors";
 import yargs from "yargs";
@@ -7,7 +7,7 @@ import { hideBin } from "yargs/helpers";
 
 import * as logger from "./log";
 import schema from "./schema";
-import { ERRORS, WARN } from "./const";
+import { ERRORS, INFO, WARN } from "./const";
 
 export async function main(
   cwd: string,
@@ -41,6 +41,9 @@ export async function main(
   );
   logger.debug("correctSchemaPath", correctSchemaPath);
 
+  const membersDir = resolve(__filename, "..", "..", "members");
+  logger.debug("membersDir", membersDir);
+
   if (!files || files.length === 0) {
     logger.newline();
     logger.warn(WARN.no_files);
@@ -54,6 +57,11 @@ export async function main(
     logger.newline();
     const path = resolve(cwd, file);
     logger.info(picocolors.bold(path));
+
+    if (!path.startsWith(membersDir) && !path.includes(`test${sep}files`)) {
+      logger.info(INFO.skip_not_in_members_dir);
+      continue;
+    }
 
     // Check if the file exists and is a file
     if (!existsSync(path) || !statSync(path).isFile()) {

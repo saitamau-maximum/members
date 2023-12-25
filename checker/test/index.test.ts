@@ -9,11 +9,14 @@ it("should work", async () => {
   expect(await main(cwd, [])).toStrictEqual([0, WARN.no_files]);
 });
 
+it("skip file not in members dir", async () => {
+  expect(await main(cwd, ["node", "cli.js", "foobar"])).toStrictEqual([0, ""]);
+});
+
 it("not found", async () => {
-  expect(await main(cwd, ["node", "cli.js", "foobar"])).toStrictEqual([
-    1,
-    ERRORS.file_not_found,
-  ]);
+  expect(
+    await main(cwd, ["node", "cli.js", "test/files/foobar"])
+  ).toStrictEqual([1, ERRORS.file_not_found]);
 });
 
 it("not file", async () => {
