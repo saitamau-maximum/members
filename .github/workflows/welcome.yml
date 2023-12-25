@@ -74,14 +74,10 @@ jobs:
           echo "MONTH=$REM_MONTH" >> $GITHUB_OUTPUT
           # 月 250 円、 4 月からスタート
           COST=$((250 * REM_MONTH))
-          # カンマ区切りにして出力
-          echo "COST=`printf "%'d" $COST`" >> $GITHUB_OUTPUT
-          printf "%'d" $COST
+          echo "COST=$COST" >> $GITHUB_OUTPUT
       - name: Create Message for new member
         run: |
-          echo ${{ steps.cost.outputs.cost }}
           DELIM=$(openssl rand -hex 16)
-          RAND=$(openssl rand -hex 32)
           cat << $DELIM > new_member.md
           こんにちは、 @${{ github.event.pull_request.user.login }} さん！
           入会申請ありがとうございます！
@@ -97,6 +93,7 @@ jobs:
           <https://forms.office.com/r/faZGt3DDDG>
 
           また、入会フォームの送信後に、下記口座にサークル費 ${{ steps.cost.outputs.cost }} 円を振り込んでください。
+          振込名義は、入会フォームで入力した名前としてください。
           (月 250 円 × ${{ steps.cost.outputs.month }} ヶ月分、手数料は自己負担となります)
 
           - 青木信用金庫
