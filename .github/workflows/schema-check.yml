@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: "20.10"
           cache: "pnpm"
+          cache-dependency-path: "./checker/pnpm-lock.yaml"
       - name: Install deps
         run: pnpm install
         working-directory: ./checker
