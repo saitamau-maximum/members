@@ -12,3 +12,8 @@ export const ERRORS = {
 export const WARN = {
   no_files: "No files to check",
 };
+
+export const INFO = {
+  skip_not_in_members_dir:
+    "Skipping file because it is not in the members directory",
+};
