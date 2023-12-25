@@ -62,7 +62,7 @@ jobs:
   send-message:
     name: Messenger
     runs-on: ubuntu-latest
-    # if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name != 'saitamau-maximum/members'
+    if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name != 'saitamau-maximum/members'
     env:
       TZ: Asia/Tokyo
     steps:
