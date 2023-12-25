@@ -63,7 +63,20 @@ jobs:
     name: Messenger
     runs-on: ubuntu-latest
     # if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name != 'saitamau-maximum/members'
+    env:
+      TZ: Asia/Tokyo
     steps:
+      - name: Get Cost
+        id: cost
+        run: |
+          MONTH=$(date +%m)
+          REM_MONTH=$((12 - (MONTH - 4 + 12) % 12)))
+          echo "MONTH=$MONTH" >> $GITHUB_OUTPUT
+          # 月 250 円、 4 月からスタート
+          COST=$((250 * REM_MONTH))
+          # カンマ区切りにする
+          COST=$(printf "%'d" $COST)
+          echo "COST=$COST" >> $GITHUB_OUTPUT
       - name: Create Message for new member
         run: |
           DELIM=$(openssl rand -hex 16)
@@ -81,7 +94,8 @@ jobs:
 
           <https://forms.office.com/r/faZGt3DDDG>
 
-          また、入会フォームの送信後に、下記口座にサークル費 3,000 円をお振り込みください。
+          また、入会フォームの送信後に、下記口座にサークル費 ${{ steps.cost.outputs.cost }} 円を振り込んでください。
+          (250 円 × ${{ steps.cost.outputs.month }} ヶ月分、手数料は自己負担となります)
 
           - 青木信用金庫
           - 支店名: 埼大通支店
