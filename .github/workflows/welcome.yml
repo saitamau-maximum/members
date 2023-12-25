@@ -76,13 +76,13 @@ jobs:
           COST=$((250 * REM_MONTH))
           # カンマ区切りにする
           COST=$(printf "%'d" $COST)
-          # カンマは使えない？のでエスケープ
-          COST=$(echo $COST | sed -e 's/,/_/g')
           echo "COST=$COST" >> $GITHUB_OUTPUT
+          echo $COST
       - name: Create Message for new member
         run: |
-          COST=$(echo ${{ steps.cost.outputs.cost }} | sed -e 's/_/,/g')
+          echo ${{ steps.cost.outputs.cost }}
           DELIM=$(openssl rand -hex 16)
+          RAND=$(openssl rand -hex 32)
           cat << $DELIM > new_member.md
           こんにちは、 @${{ github.event.pull_request.user.login }} さん！
           入会申請ありがとうございます！
@@ -92,12 +92,12 @@ jobs:
           なお、確認用の文字列として、以下の文字列を入力してください。
 
           ```plaintext
-          ${{ github.event.pull_request.head.sha }}
+          $RAND
           ```
 
           <https://forms.office.com/r/faZGt3DDDG>
 
-          また、入会フォームの送信後に、下記口座にサークル費 $COST 円を振り込んでください。
+          また、入会フォームの送信後に、下記口座にサークル費 ${{ steps.cost.outputs.cost }} 円を振り込んでください。
           (月 250 円 × ${{ steps.cost.outputs.month }} ヶ月分、手数料は自己負担となります)
 
           - 青木信用金庫
@@ -123,8 +123,10 @@ jobs:
           以下のことを完了したら Approve をし、このプルリクエストをマージしてください。
           上から順に行うことを想定しています。
 
-          - [ ] JSON ファイルの確認 (CI が通っているか)
+          - [ ] JSON ファイルの確認
+                CI が通っているかでチェックできる (...はず)
           - [ ] 入会フォームの確認
+                確認用文字列も含めて、入力内容が正しいかを確認する
           - [ ] サークル費の振り込みの確認 (saitamau-maximum/accountants が行う)
           - [ ] GitHub への招待
                 Org -> Teams -> 年度のチーム -> Add a member
