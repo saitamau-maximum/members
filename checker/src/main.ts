@@ -96,7 +96,7 @@ export async function main(
     }
 
     // Check if the schema is correct
-    const schemaPath = resolve(cwd, file, parsed.data.$schema);
+    const schemaPath = resolve(path, "..", parsed.data.$schema);
     logger.debug("schemaPath", schemaPath);
 
     if (schemaPath !== correctSchemaPath) {
