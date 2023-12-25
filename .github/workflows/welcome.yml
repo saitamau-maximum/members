@@ -1,4 +1,4 @@
-name: Schema Checker
+name: Welcome to Maximum!
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "members/**/*.json"
+      - ".github/workflows/welcome.yml"
 
 jobs:
   schema-check:
