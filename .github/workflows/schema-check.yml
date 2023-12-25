@@ -31,7 +31,7 @@ jobs:
       - name: Build
         run: pnpm build
         working-directory: ./checker
-      - name: Check if filename is valid
+      - name: Check if the file names are valid
         run: |
           files=$(git diff --name-only origin/main HEAD)
           IFS=$'\n'
