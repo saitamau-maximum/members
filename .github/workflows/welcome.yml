@@ -1,0 +1,146 @@
+name: Welcome to Maximum!
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "members/**/*.json"
+      - ".github/workflows/welcome.yml"
+
+jobs:
+  schema-check:
+    name: Schema Check
+    runs-on: ubuntu-latest
+    if: github.repository == 'saitamau-maximum/members'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "8.12.0"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10"
+          cache: "pnpm"
+          cache-dependency-path: "./checker/pnpm-lock.yaml"
+      - name: Install deps
+        run: pnpm install
+        working-directory: ./checker
+      - name: Build
+        run: pnpm build
+        working-directory: ./checker
+      - name: Check if the file names are valid
+        run: |
+          files=$(git diff --name-only origin/main HEAD)
+          IFS=$'\n'
+          for file in $files; do
+            # Check if the file name does not contain spaces
+            if [[ "$file" =~ \ |\' ]]; then
+              echo "File name contains spaces: $file"
+              exit 1
+            fi
+            # Check if the file name does not contain non-ASCII characters
+            if [[ "$file" =~ [^[:ascii:]] ]]; then
+              echo "File name contains non-ASCII characters: $file"
+              exit 1
+            fi
+          done
+      - name: Check schema
+        run: |
+          modified=$(git diff --name-only origin/main HEAD | tr '\n' ' ')
+          if [ -z "$modified" ]; then
+            echo "No files modified"
+            exit 0
+          fi
+          node ./checker/dist/cli.js $modified
+
+  send-message:
+    name: Messenger
+    runs-on: ubuntu-latest
+    if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name != 'saitamau-maximum/members'
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - name: Get Cost
+        id: cost
+        run: |
+          MONTH=$(date +%m)
+          REM_MONTH=$((12 - (MONTH - 4 + 12) % 12))
+          echo "MONTH=$REM_MONTH" >> $GITHUB_OUTPUT
+          # 月 250 円、 4 月からスタート
+          COST=$((250 * REM_MONTH))
+          echo "COST=$COST" >> $GITHUB_OUTPUT
+      - name: Create Message for new member
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > new_member.md
+          こんにちは、 @${{ github.event.pull_request.user.login }} さん！
+          入会申請ありがとうございます！
+
+          以下のリンクが入会フォームとなります。
+          このフォームに必要事項を記入して、送信をお願いします！
+          なお、確認用の文字列として、以下の文字列を入力してください。
+
+          \`\`\`plaintext
+          ${{ github.event.pull_request.head.sha }}
+          \`\`\`
+
+          <https://forms.office.com/r/faZGt3DDDG>
+
+          また、入会フォームの送信後に、下記口座にサークル費 ${{ steps.cost.outputs.cost }} 円を振り込んでください。
+          振込名義は、入会フォームで入力した名前としてください。
+          (月 250 円 × ${{ steps.cost.outputs.month }} ヶ月分、手数料は自己負担となります)
+
+          - 青木信用金庫
+          - 支店名: 埼大通支店
+          - 預金種目: 普通
+          - 口座番号: 3456237
+
+          担当者が確認後、諸手続きを行った後に Discord サーバーへの招待を行います。
+          それまでお待ちください。
+
+          以上、よろしくお願いします！
+
+          > [!IMPORTANT]
+          > 担当者からコメントが付くので、通知を見逃さないようにお願いします！
+          > 必要であれば、 [GitHub の設定](https://github.com/settings/notifications) からメールを受け取るようにしておくことをおすすめします。
+          $DELIM
+      - name: Create Message for leaders
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > leaders.md
+          @saitamau-maximum/leaders
+          新しいメンバーが入会申請を行いました。
+          以下のことを完了したら Approve をし、このプルリクエストをマージしてください。
+          上から順に行うことを想定しています。
+
+          - [ ] JSON ファイルの確認
+                CI が通っているかでチェックできる
+          - [ ] 入会フォームの確認
+                確認用文字列も含めて、入力内容が正しいかを確認する
+          - [ ] サークル費の振り込みの確認 (saitamau-maximum/accountants が行う)
+          - [ ] GitHub への招待
+                Org -> Teams -> 年度のチーム -> Add a member
+          - [ ] Discord への招待
+                コメントで行う、有効期限は 1 day, 1 use とすべき
+          $DELIM
+      - name: Create Message for accountants
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > accountants.md
+          @saitamau-maximum/accountants
+          サークル費の振り込みが完了したことを確認したら、このプルリクエストに Approve をしてください。
+          $DELIM
+      - name: Send
+        run: |
+          gh pr comment -F ./new_member.md "${URL}"
+          gh pr comment -F ./leaders.md "${URL}"
+          gh pr comment -F ./accountants.md "${URL}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}
