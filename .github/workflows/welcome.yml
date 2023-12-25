@@ -58,3 +58,20 @@ jobs:
             exit 0
           fi
           node ./checker/dist/cli.js $modified
+
+  send-message:
+    name: Messenger
+    runs-on: ubuntu-latest
+    # if: github.repository == 'saitamau-maximum/members' && github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Create Message
+        run: |
+          DELIM=$(openssl rand -hex 16)
+          cat << $DELIM > msg.md
+          Hello!
+          $DELIM
+      - name: Send
+        run: gh pr comment -F ./msg.md "${URL}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}
