@@ -75,7 +75,7 @@ jobs:
           # 月 250 円、 4 月からスタート
           COST=$((250 * REM_MONTH))
           # カンマ区切りにして出力
-          echo "COST=${printf "%'d" $COST}" >> $GITHUB_OUTPUT
+          echo "COST=`printf "%'d" $COST`" >> $GITHUB_OUTPUT
           printf "%'d" $COST
       - name: Create Message for new member
         run: |
@@ -123,7 +123,7 @@ jobs:
           上から順に行うことを想定しています。
 
           - [ ] JSON ファイルの確認
-                CI が通っているかでチェックできる (...はず)
+                CI が通っているかでチェックできる
           - [ ] 入会フォームの確認
                 確認用文字列も含めて、入力内容が正しいかを確認する
           - [ ] サークル費の振り込みの確認 (saitamau-maximum/accountants が行う)
