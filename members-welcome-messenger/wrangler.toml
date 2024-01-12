@@ -1,0 +1,7 @@
+name = "members-welcome-messenger"
+main = "src/index.ts"
+compatibility_date = "2024-01-12"
+env = { }
+
+[triggers]
+crons = [ ]
