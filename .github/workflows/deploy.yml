@@ -1,0 +1,54 @@
+name: Deploy api to Pages
+
+on:
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    if: github.repository == 'saitamau-maximum/members'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: "8.12.0"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10"
+          cache: "pnpm"
+          cache-dependency-path: "./api/pnpm-lock.yaml"
+      - name: Install deps
+        run: pnpm install
+        working-directory: ./api
+      - name: Build
+        run: pnpm build
+        working-directory: ./api
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: "./api/dist"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
