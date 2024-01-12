@@ -29,6 +29,6 @@ Actions では、 Fork に対して Token がちゃんと渡らないので、 `
    WEBHOOK_SECRET="..."
    ```
 
-2. `gh webhook forward --repo=members --org=saitamau-maximum --events=pull_request --url="http://localhost:8787"` で Webhook を Local Forward
+2. `gh webhook forward --repo=members --org=saitamau-maximum --events=pull_request --url="http://localhost:8787" --secret="WEBHOOK_SECRET"` で Webhook を Local Forward
    (GitHub docs: <https://docs.github.com/ja/webhooks/testing-and-troubleshooting-webhooks/using-the-github-cli-to-forward-webhooks-for-testing>)
 3. `pnpm start`
