@@ -1,5 +1,8 @@
-import type Env from './env';
+import { Octokit } from 'octokit';
 import { verify } from '@octokit/webhooks-methods';
+import type { PullRequestOpenedEvent } from '@octokit/webhooks-types';
+
+import type Env from './env';
 
 export default {
 	async fetch(request: Request, env: Env, _ctx: any) {
@@ -20,13 +23,16 @@ export default {
 			return new Response('Unauthorized', { status: 401 });
 		}
 
-		const body = await request.text();
+		const payload = await request.json<PullRequestOpenedEvent>();
 
 		// Verify signature
-		if (!(await verify(env.WEBHOOK_SECRET, body, request.headers.get('X-Hub-Signature-256')!))) {
+		if (!(await verify(env.WEBHOOK_SECRET, JSON.stringify(payload), request.headers.get('X-Hub-Signature-256')!))) {
 			return new Response('Unauthorized', { status: 401 });
 		}
 
-		return new Response('Hello World!');
+		// Create Octokit instance
+		const octokit = new Octokit({ auth: env.GH_TOKEN });
+
+		return new Response('Accepted', { status: 202 });
 	},
 };
