@@ -3,6 +3,7 @@ import { verify } from '@octokit/webhooks-methods';
 import type { PullRequestOpenedEvent } from '@octokit/webhooks-types';
 
 import type Env from './env';
+import generateMessages from './messages';
 
 export default {
 	async fetch(request: Request, env: Env, _ctx: any) {
@@ -32,6 +33,19 @@ export default {
 
 		// Create Octokit instance
 		const octokit = new Octokit({ auth: env.GH_TOKEN });
+
+		// Gemerate messages
+		const messages = generateMessages(payload);
+
+		// Send messages
+		for (const message of messages) {
+			await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+				owner: 'saitamau-maximum',
+				repo: 'members',
+				issue_number: payload.number,
+				body: message,
+			});
+		}
 
 		return new Response('Accepted', { status: 202 });
 	},
