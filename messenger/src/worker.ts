@@ -31,6 +31,11 @@ export default {
 			return new Response('Unauthorized', { status: 401 });
 		}
 
+		// Run only when the pull request is opened
+		if (payload.action !== 'opened') {
+			return new Response('Accepted', { status: 202 });
+		}
+
 		// Create Octokit instance
 		const octokit = new Octokit({ auth: env.GH_TOKEN });
 
@@ -47,6 +52,6 @@ export default {
 			});
 		}
 
-		return new Response('Accepted', { status: 202 });
+		return new Response('Created', { status: 201 });
 	},
 };
