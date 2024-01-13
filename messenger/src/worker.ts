@@ -1,5 +1,5 @@
 import type Env from './env';
-import verify_signature from './gh-signature';
+import { verify } from '@octokit/webhooks-methods';
 
 export default {
 	async fetch(request: Request, env: Env, _ctx: any) {
@@ -15,8 +15,15 @@ export default {
 			return new Response('Method Not Allowed', { status: 405 });
 		}
 
+		// Check if the header is set
+		if (!request.headers.has('X-Hub-Signature-256')) {
+			return new Response('Unauthorized', { status: 401 });
+		}
+
+		const body = await request.text();
+
 		// Verify signature
-		if (!verify_signature(request, env.WEBHOOK_SECRET)) {
+		if (!(await verify(env.WEBHOOK_SECRET, body, request.headers.get('X-Hub-Signature-256')!))) {
 			return new Response('Unauthorized', { status: 401 });
 		}
 
