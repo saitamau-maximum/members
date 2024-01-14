@@ -17,17 +17,18 @@ Actions では、 Fork に対して Token がちゃんと渡らないので、 `
 
 ## 関係する人へ
 
-定期的に Cloudflare から members-welcome-messenger の環境変数 `GH_TOKEN` を更新してください。
-ここから Token が見れます: <https://github.com/organizations/saitamau-maximum/settings/personal-access-tokens/active>
+<https://github.com/organizations/saitamau-maximum/settings/apps/maximum-welcome-bot>
 
-## 開発メモ
+Private Key の SHA256: `GrNGFiMen10Wj1/qyuHR6xaMIz4TioYPWbXnuVFjHko=`
 
 1. `.dev.vars` に環境変数を書く
 
-   ```
-   GH_TOKEN="..."
+   ```plaintext
+   GH_APP_PRIVKEY="..."
    WEBHOOK_SECRET="..."
    ```
+
+   Private Key は `openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in INPUT_FILE | openssl base64 -A` でデコードしたもの
 
 2. `gh webhook forward --repo=members --org=saitamau-maximum --events=pull_request --url="http://localhost:8787" --secret="WEBHOOK_SECRET"` で Webhook を Local Forward
    (GitHub docs: <https://docs.github.com/ja/webhooks/testing-and-troubleshooting-webhooks/using-the-github-cli-to-forward-webhooks-for-testing>)

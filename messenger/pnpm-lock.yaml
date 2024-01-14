@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@octokit/auth-app':
+    specifier: ^6.0.3
+    version: 6.0.3
   '@octokit/core':
     specifier: ^5.0.2
     version: 5.0.2
