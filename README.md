@@ -264,7 +264,7 @@ git push
 
 ## メッセージを変更したいとき
 
-`.github/workflows/welcome.yml` を見て適宜変更してください。
+`messenger/src/messages/*.ts` を見て適宜変更してください。
 
 ## LICENSE
 
