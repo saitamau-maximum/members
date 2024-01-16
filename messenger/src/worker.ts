@@ -31,6 +31,16 @@ export default {
 		const app = new App({ appId: APP_ID, privateKey: APP_PRIVKEY, webhooks: { secret: env.WEBHOOK_SECRET } });
 
 		app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
+			const sender = payload.sender.login;
+			// mainブランチに/members/{sender}.jsonが存在すればスキップ
+			const checkRes = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+				owner: 'saitamau-maximum',
+				repo: 'members',
+				path: `members/${sender}.json`,
+			});
+			if (checkRes.status === 200) {
+				return;
+			}
 			// Send messages
 			const messages = generateMessages(payload);
 			for (const message of messages) {
