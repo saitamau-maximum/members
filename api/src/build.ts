@@ -47,12 +47,7 @@ const main = async () => {
       })
     );
     const membersInfoJSON = JSON.stringify(membersInfo);
-    await mkdir(join(distDir, "members"));
-    await writeFile(
-      join(distDir, "members", "index.json"),
-      membersInfoJSON,
-      "utf-8"
-    );
+    await writeFile(join(distDir, "index.json"), membersInfoJSON, "utf-8");
     console.log("Done.");
   } catch (e) {
     console.error(piko.red("予期せぬエラーが発生しました。"));
