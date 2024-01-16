@@ -33,23 +33,23 @@ export default {
 		app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
 			const sender = payload.sender.login;
 			// mainブランチに/members/{sender}.jsonが存在すればスキップ
-			const checkRes = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-				owner: 'saitamau-maximum',
-				repo: 'members',
-				path: `members/${sender}.json`,
-			});
-			if (checkRes.status === 200) {
-				return;
-			}
-			// Send messages
-			const messages = generateMessages(payload);
-			for (const message of messages) {
-				await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+			try {
+				await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
 					owner: 'saitamau-maximum',
 					repo: 'members',
-					issue_number: payload.number,
-					body: message,
+					path: `members/${sender}.json`,
 				});
+			} catch (e) {
+				// Send messages
+				const messages = generateMessages(payload);
+				for (const message of messages) {
+					await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+						owner: 'saitamau-maximum',
+						repo: 'members',
+						issue_number: payload.number,
+						body: message,
+					});
+				}
 			}
 		});
 
