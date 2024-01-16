@@ -1,2 +1,2 @@
-# leaders, accountant からのレビューを必須にするための設定
-* @saitamau-maximum/leaders @saitamau-maximum/accountants
+# /members 配下のファイルを変更したとき leaders, accountant からのレビューを必須にするための設定
+/members/ @saitamau-maximum/leaders @saitamau-maximum/accountants
