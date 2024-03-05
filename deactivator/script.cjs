@@ -2,7 +2,7 @@ const { resolve } = require("path")
 const { readdirSync, readFileSync, writeFileSync } = require("fs")
 
 // members のディレクトリパス
-const membersDir = resolve(__filename, "..", "..", "members")
+const membersDir = resolve(__dirname, "..", "members")
 console.log(`Members directory: ${membersDir}`)
 
 // members のディレクトリ内のファイル名を取得
