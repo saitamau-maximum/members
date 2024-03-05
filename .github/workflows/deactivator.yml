@@ -1,0 +1,27 @@
+name: Deactivator
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 4/1 00:00 (UTC) に実行
+    - cron: "0 0 1 4 *"
+
+jobs:
+  deactivate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run Deactivator
+        run: node deactivator/script.cjs
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: deactivate all members"
+          title: "[Auto] Deactivate all members"
+          branch-suffix: "short-commit-hash"
