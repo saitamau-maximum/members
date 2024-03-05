@@ -1,6 +1,7 @@
 # Checker
 
-Schema Checker です
+Schema Checker です。
+PR 時に、追加/変更された JSON ファイルのスキーマが正しいかチェックします。
 
 ## 使い方
 
