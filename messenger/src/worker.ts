@@ -1,7 +1,7 @@
 import { App } from 'octokit';
 
 import type Env from './env';
-import { generateMessagesForNew } from './messages';
+import { generateMessagesForContinuing, generateMessagesForNew } from './messages';
 
 export default {
 	async fetch(request: Request, env: Env, _ctx: any) {
@@ -32,15 +32,32 @@ export default {
 
 		app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
 			const sender = payload.sender.login;
-			// mainブランチに/members/{sender}.jsonが存在すればスキップ
 			try {
-				await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+				// main ブランチに /members/{sender}.json が存在していて、
+				// isActive が false なら、継続者向けメッセージを生成してコメントする
+				const res = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
 					owner: 'saitamau-maximum',
 					repo: 'members',
 					path: `members/${sender}.json`,
 				});
+
+				if (!Array.isArray(res.data) && res.data.type === 'file') {
+					const jsonContent = JSON.parse(atob(res.data.content));
+					if (!jsonContent.isActive) {
+						const messages = generateMessagesForContinuing(payload);
+						for (const message of messages) {
+							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+								owner: 'saitamau-maximum',
+								repo: 'members',
+								issue_number: payload.number,
+								body: message,
+							});
+						}
+					}
+				}
 			} catch (e) {
-				// Send messages
+				// main ブランチに /members/{sender}.json が存在しない場合、
+				// 新規入会者向けメッセージを生成してコメントする
 				const messages = generateMessagesForNew(payload);
 				for (const message of messages) {
 					await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
