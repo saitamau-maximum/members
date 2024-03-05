@@ -1,7 +1,7 @@
 import { App } from 'octokit';
 
 import type Env from './env';
-import generateMessages from './messages';
+import { generateMessagesForNew } from './messages';
 
 export default {
 	async fetch(request: Request, env: Env, _ctx: any) {
@@ -41,7 +41,7 @@ export default {
 				});
 			} catch (e) {
 				// Send messages
-				const messages = generateMessages(payload);
+				const messages = generateMessagesForNew(payload);
 				for (const message of messages) {
 					await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
 						owner: 'saitamau-maximum',
