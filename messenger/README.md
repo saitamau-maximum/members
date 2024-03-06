@@ -15,6 +15,16 @@ Actions では、 Fork に対して Token がちゃんと渡らないので、 `
 しかし、このリポジトリでは Fork からの PR でもコメントを追加できるようにしたい！
 ということで、 Webhook を介してコメントを追加するようにした。
 
+## 要件メモ
+
+- `POST /` のみに反応する
+- ちゃんと Webhook の署名を確認する (<https://docs.github.com/ja/webhooks/using-webhooks/validating-webhook-deliveries>)
+- PR が Open したときにコメントを送信する
+- 新規入会者向けにメッセージを送信する
+  - 現在の判定ロジック: main ブランチに `{sender}.json` が存在しないこと
+- 継続者向けにメッセージを送信する
+  - 現在の判定ロジック: main ブランチに `{sender}.json` が存在していて、main ブランチ内で isActive が false になっていること
+
 ## 関係する人へ
 
 <https://github.com/organizations/saitamau-maximum/settings/apps/maximum-welcome-bot>

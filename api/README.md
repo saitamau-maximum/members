@@ -1,7 +1,7 @@
 # API
 
-Maximumのメンバー情報を取得できるAPIのビルダーです。
-mainマージ時に自動でjsonがビルドされ、GitHub Pagesにデプロイされます。
+Maximum のメンバー情報を取得できる API のビルダーです。
+main マージ時に自動で json がビルドされ、 GitHub Pages にデプロイされます。
 
 ## 使い方
 
