@@ -28,7 +28,7 @@ const message = (webhook: PullRequestOpenedEvent) => `
 ${webhook.pull_request.head.sha}
 \`\`\`
 
-<https://forms.office.com/r/faZGt3DDDG>
+<https://forms.office.com/r/Pnq5kU29xL>
 
 また、入会フォームの送信後に、下記口座にサークル費 ${cost} 円を振り込んでください。
 振込名義は、入会フォームで入力した名前としてください。
