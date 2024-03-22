@@ -39,6 +39,7 @@ const main = async () => {
     const members = await readdir(membersDir);
     const membersInfo = await Promise.all(
       members.map(async (member) => {
+        if (!member.endsWith(".json")) return;
         const memberFile = join(membersDir, member);
         const memberInfoJSON = await readFile(memberFile);
         const memberInfo = JSON.parse(memberInfoJSON.toString());
