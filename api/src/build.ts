@@ -48,7 +48,9 @@ const main = async () => {
           return memberInfo;
         })
       )
-    ).filter(Boolean);
+    )
+      .filter(Boolean)
+      .sort((a, b) => parseInt(a.id) - parseInt(b.id));
     const membersInfoJSON = JSON.stringify(membersInfo);
     await writeFile(join(distDir, "index.json"), membersInfoJSON, "utf-8");
     console.log("Done.");
