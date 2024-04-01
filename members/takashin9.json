@@ -1,8 +1,9 @@
 {
-    "$schema": "../members.schema.json",
-    "id": "91837495",
-    "name": "takashin9",
-    "grade": ["21B"],
-    "isActive": true
-  }
-  
+  "$schema": "../members.schema.json",
+  "id": "91837495",
+  "name": "takashin9",
+  "grade": [
+    "21B"
+  ],
+  "isActive": false
+}
