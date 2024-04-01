@@ -12,6 +12,8 @@ const memberFiles = readdirSync(membersDir)
 for (const file of memberFiles) {
   // ファイルのパスを取得
   const filePath = resolve(membersDir, file)
+  if (!filePath.endsWith(".json")) continue;
+  
   console.log(`\nProcessing ${filePath}...`)
 
   // ファイルを読み込む
