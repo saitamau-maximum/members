@@ -1,7 +1,9 @@
 {
-    "$schema": "../members.schema.json",
-    "id": "132898015",
-    "name": "hana-rs",
-    "grade": ["23B"],
-    "isActive": true
-  }
+  "$schema": "../members.schema.json",
+  "id": "132898015",
+  "name": "hana-rs",
+  "grade": [
+    "23B"
+  ],
+  "isActive": false
+}

@@ -2,6 +2,8 @@
   "$schema": "../members.schema.json",
   "id": "132897848",
   "name": "LLstream",
-  "grade": ["23B"],
-  "isActive": true
+  "grade": [
+    "23B"
+  ],
+  "isActive": false
 }

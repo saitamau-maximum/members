@@ -2,6 +2,8 @@
   "$schema": "../members.schema.json",
   "id": "32415464",
   "name": "yukikamome316",
-  "grade": ["22B"],
-  "isActive": true
+  "grade": [
+    "22B"
+  ],
+  "isActive": false
 }

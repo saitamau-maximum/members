@@ -1,7 +1,9 @@
 {
-    "$schema": "../members.schema.json",
-    "id": "92908864",
-    "name": "Yuya-Otsubo-28",
-    "grade": ["21B"],
-    "isActive": true
+  "$schema": "../members.schema.json",
+  "id": "92908864",
+  "name": "Yuya-Otsubo-28",
+  "grade": [
+    "21B"
+  ],
+  "isActive": false
 }
