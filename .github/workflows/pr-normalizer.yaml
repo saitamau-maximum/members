@@ -1,0 +1,42 @@
+name: PR Normalizer
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+    paths:
+      - "members/**/*.json"
+      - ".github/workflows/pr-normalizer.yaml"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  normalize-pr:
+    name: Normalize PR
+    runs-on: ubuntu-latest
+    if: github.repository == 'saitamau-maximum/members'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Is the latest diff is Added or Modified?
+        id: check_is_added
+        run: |
+          ADDED_LINE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD | grep '^A' | wc -l)
+          if [ $ADDED_LINE -gt 0 ]; then
+            IS_ADDED="true"
+          else
+            IS_ADDED="false"
+          fi
+          echo "IS_ADDED=$IS_ADDED" >> $GITHUB_OUTPUT
+      - name: Update Pull Request's Title (Added)
+        if: steps.check_is_added.outputs.IS_ADDED == 'true'
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --title "継続届: ${github.event.pull_request.user.login }"
+      - name: Update Pull Request's Title (Modified)
+        if: steps.check_is_added.outputs.IS_ADDED == 'false'
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --title "入部届: ${github.event.pull_request.user.login }"
