@@ -22,10 +22,21 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
+      - name: Is bot?
+        id: check_is_bot
+        run: |
+          if [ "${{ github.event.pull_request.user.login }}" == 'Bogithub-actions[bot]' ]; then
+            IS_BOT="true"
+          else
+            IS_BOT="false"
+          fi
+          echo "IS_BOT=$IS_BOT" >> $GITHUB_OUTPUT
+          echo "[DEBUG] IS_BOT: $IS_BOT"
       - name: Is the latest diff is Added or Modified?
         id: check_is_added
+        if: steps.check_is_bot.outputs.IS_BOT == 'false'
         run: |
-          ADDED_LINE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD | grep '^A' | wc -l)
+          ADDED_LINE=$(git diff --name-only ${{ github.event.pull_request.base.sha }} origin/main | grep '^A' | wc -l)
           if [ $ADDED_LINE -gt 0 ]; then
             IS_ADDED="true"
           else
@@ -34,10 +45,10 @@ jobs:
           echo "IS_ADDED=$IS_ADDED" >> $GITHUB_OUTPUT
           echo "[DEBUG] IS_ADDED: $IS_ADDED"
       - name: Update Pull Request's Title (Added)
-        if: steps.check_is_added.outputs.IS_ADDED == 'true'
+        if: steps.check_is_added.outputs.IS_ADDED == 'true' && steps.check_is_bot.outputs.IS_BOT == 'false'
         run: |
           gh pr edit ${{ github.event.pull_request.number }} --title "入部届: ${{ github.event.pull_request.user.login }}"
       - name: Update Pull Request's Title (Modified)
-        if: steps.check_is_added.outputs.IS_ADDED == 'false'
+        if: steps.check_is_added.outputs.IS_ADDED == 'false' && steps.check_is_bot.outputs.IS_BOT == 'false'
         run: |
           gh pr edit ${{ github.event.pull_request.number }} --title "継続届: ${{ github.event.pull_request.user.login }}"
