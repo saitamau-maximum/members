@@ -25,7 +25,7 @@ jobs:
       - name: Is bot?
         id: check_is_bot
         run: |
-          if [ "${{ github.event.pull_request.user.login }}" == 'Bogithub-actions[bot]' ]; then
+          if [ "${{ github.event.pull_request.user.login }}" == 'github-actions[bot]' ]; then
             IS_BOT="true"
           else
             IS_BOT="false"
