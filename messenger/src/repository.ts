@@ -41,4 +41,14 @@ export class GithubPullRequestRepository {
 			});
 		}
 	}
+
+	// Pull Request のタイトルを更新する
+	async updatePullRequestTitle(title: string) {
+		await this.octokit.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
+			owner: this.owner,
+			repo: this.repo,
+			issue_number: this.issue_number,
+			title,
+		});
+	}
 }
