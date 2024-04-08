@@ -47,7 +47,7 @@ export default {
 
 			if (status === 'continuing') {
 				// 継続者向けのタイトルに変更する
-				await prRepository.updatePullRequestTitle(`継続者: ${sender}`);
+				await prRepository.updatePullRequestTitle(`継続届: ${sender}`);
 				// 継続者向けメッセージを生成してコメントする
 				const messages = generateMessagesForContinuing(payload);
 				await prRepository.sendMessages(messages);
