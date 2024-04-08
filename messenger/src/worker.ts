@@ -2,9 +2,10 @@ import { App } from 'octokit';
 
 import type Env from './env';
 import { generateMessagesForContinuing, generateMessagesForNew } from './messages';
+import { GithubPullRequestRepository } from './repository';
 
 export default {
-	async fetch(request: Request, env: Env, _ctx: any) {
+	async fetch(request, env) {
 		const req_url = new URL(request.url);
 
 		// Do not respond other than /
@@ -32,41 +33,16 @@ export default {
 
 		app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
 			const sender = payload.sender.login;
-			try {
-				// main ブランチに /members/{sender}.json が存在していて、
-				// isActive が false なら、継続者向けメッセージを生成してコメントする
-				const res = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-					owner: 'saitamau-maximum',
-					repo: 'members',
-					path: `members/${sender}.json`,
-				});
+			const prRepository = new GithubPullRequestRepository(octokit, payload.number);
 
-				if (!Array.isArray(res.data) && res.data.type === 'file') {
-					const jsonContent = JSON.parse(atob(res.data.content));
-					if (!jsonContent.isActive) {
-						const messages = generateMessagesForContinuing(payload);
-						for (const message of messages) {
-							await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-								owner: 'saitamau-maximum',
-								repo: 'members',
-								issue_number: payload.number,
-								body: message,
-							});
-						}
-					}
-				}
-			} catch (e) {
-				// main ブランチに /members/{sender}.json が存在しない場合、
+			if (await prRepository.isNewbie(sender)) {
 				// 新規入会者向けメッセージを生成してコメントする
 				const messages = generateMessagesForNew(payload);
-				for (const message of messages) {
-					await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-						owner: 'saitamau-maximum',
-						repo: 'members',
-						issue_number: payload.number,
-						body: message,
-					});
-				}
+				await prRepository.sendMessages(messages);
+			} else {
+				// 継続者向けメッセージを生成してコメントする
+				const messages = generateMessagesForContinuing(payload);
+				await prRepository.sendMessages(messages);
 			}
 		});
 
@@ -81,4 +57,4 @@ export default {
 
 		return new Response('Created', { status: 201 });
 	},
-};
+} as ExportedHandler<Env>;
