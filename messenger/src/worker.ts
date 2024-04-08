@@ -35,13 +35,17 @@ export default {
 			const sender = payload.sender.login;
 			const prRepository = new GithubPullRequestRepository(octokit, payload.number);
 
-			if (await prRepository.isNewbie(sender)) {
+			const status = await prRepository.checkMemberStatus(sender);
+
+			if (status === 'newbie') {
 				// 新規入会者向けのタイトルに変更する
 				await prRepository.updatePullRequestTitle(`入部届: ${sender}`);
 				// 新規入会者向けメッセージを生成してコメントする
 				const messages = generateMessagesForNew(payload);
 				await prRepository.sendMessages(messages);
-			} else {
+			}
+
+			if (status === 'continuing') {
 				// 継続者向けのタイトルに変更する
 				await prRepository.updatePullRequestTitle(`継続者: ${sender}`);
 				// 継続者向けメッセージを生成してコメントする
