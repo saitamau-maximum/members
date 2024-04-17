@@ -11,15 +11,15 @@ export class GithubPullRequestRepository {
 		this.issue_number = issue_number;
 	}
 
-	// main ブランチに /members/{sender}.json が存在していて、isActive が false なら継続者(continuing)である。
-	// main ブランチに /members/{sender}.json が存在していて、isActive が true なら更新なし(no-updates)である。
-	// main ブランチに /members/{sender}.json が存在していない場合は新規入会者(newbie)である。
+	// main ブランチに /data/{sender}.json が存在していて、isActive が false なら継続者(continuing)である。
+	// main ブランチに /data/{sender}.json が存在していて、isActive が true なら更新なし(no-updates)である。
+	// main ブランチに /data/{sender}.json が存在していない場合は新規入会者(newbie)である。
 	async checkMemberStatus(sender: string) {
 		try {
 			const res = await this.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
 				owner: this.owner,
 				repo: this.repo,
-				path: `members/${sender}.json`,
+				path: `data/${sender}.json`,
 			});
 
 			if (!Array.isArray(res.data) && res.data.type === 'file') {
