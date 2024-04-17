@@ -64,6 +64,11 @@ export async function main(
       continue;
     }
 
+    if (path.startsWith(membersDir) && path.includes("README.md")) {
+      logger.info(INFO.skip_readme);
+      continue;
+    }
+
     // Check if the file exists and is a file
     if (!existsSync(path) || !statSync(path).isFile()) {
       logger.error(ERRORS.file_not_found);
