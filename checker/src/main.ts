@@ -42,7 +42,7 @@ export async function main(
   );
   logger.debug("correctSchemaPath", correctSchemaPath);
 
-  const membersDir = resolve(__filename, "..", "..", "..", "members");
+  const membersDir = resolve(__filename, "..", "..", "..", "data");
   logger.debug("membersDir", membersDir);
 
   if (!files || files.length === 0) {
