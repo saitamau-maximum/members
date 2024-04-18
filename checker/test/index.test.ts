@@ -13,6 +13,12 @@ it("skip file not in members dir", async () => {
   expect(await main(cwd, ["node", "cli.js", "foobar"])).toStrictEqual([0, ""]);
 });
 
+it("skip README file", async () => {
+  expect(
+    await main(cwd, ["node", "cli.js", "../test/README.md"])
+  ).toStrictEqual([0, ""]);
+});
+
 it("not found", async () => {
   expect(
     await main(cwd, ["node", "cli.js", "test/files/foobar"])

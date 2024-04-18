@@ -42,7 +42,7 @@ export async function main(
   );
   logger.debug("correctSchemaPath", correctSchemaPath);
 
-  const membersDir = resolve(__filename, "..", "..", "..", "members");
+  const membersDir = resolve(__filename, "..", "..", "..", "data");
   logger.debug("membersDir", membersDir);
 
   if (!files || files.length === 0) {
@@ -61,6 +61,11 @@ export async function main(
 
     if (!path.startsWith(membersDir) && !path.includes(`test${sep}files`)) {
       logger.info(INFO.skip_not_in_members_dir);
+      continue;
+    }
+
+    if (path.startsWith(membersDir) && path.includes("README.md")) {
+      logger.info(INFO.skip_readme);
       continue;
     }
 

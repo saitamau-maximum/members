@@ -16,4 +16,5 @@ export const WARN = {
 export const INFO = {
   skip_not_in_members_dir:
     "Skipping file because it is not in the members directory",
+  skip_readme: "Skipping file because it is a README file",
 };
