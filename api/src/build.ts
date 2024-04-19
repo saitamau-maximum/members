@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 
 const distDir = join(__dirname, "..", "dist");
 const publicDir = join(__dirname, "..", "public");
-const membersDir = join(__dirname, "../..", "members");
+const membersDir = join(__dirname, "../..", "data");
 
 const main = async () => {
   if (process.platform === "win32") {
