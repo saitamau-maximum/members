@@ -2,8 +2,8 @@ const { resolve } = require("path")
 const { readdirSync, readFileSync, writeFileSync } = require("fs")
 
 // members のディレクトリパス
-const membersDir = resolve(__dirname, "..", "members")
-console.log(`Members directory: ${membersDir}`)
+const membersDir = resolve(__dirname, "..", "data")
+console.log(`Members' Data directory: ${membersDir}`)
 
 // members のディレクトリ内のファイル名を取得
 const memberFiles = readdirSync(membersDir)
@@ -13,7 +13,7 @@ for (const file of memberFiles) {
   // ファイルのパスを取得
   const filePath = resolve(membersDir, file)
   if (!filePath.endsWith(".json")) continue;
-  
+
   console.log(`\nProcessing ${filePath}...`)
 
   // ファイルを読み込む

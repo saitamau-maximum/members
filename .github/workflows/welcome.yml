@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "members/**.json"
+      - "data/**.json"
       - ".github/workflows/welcome.yml"
 
 jobs:
