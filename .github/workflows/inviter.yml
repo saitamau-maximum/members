@@ -22,4 +22,4 @@ jobs:
           echo "Inviting to the organization"
           author=${{ steps.pr_author.outputs.AUTHOR }}
           gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
-          gh org invite $author --role member
+          gh api https://api.github.com/orgs/saitamau-maximum/invitations --field invitee=$author --field role=member
