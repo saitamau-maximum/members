@@ -1,0 +1,25 @@
+name: Invite New Members
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  invite:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.repository == 'saitamau-maximum/members'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get PR Author
+        id: pr_author
+        run: echo "AUTHOR=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
+      - name: Invite
+        run: |
+          echo "Inviting to the organization"
+          author=${{ steps.pr_author.outputs.AUTHOR }}
+          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+          gh org invite $author --role member
