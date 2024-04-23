@@ -10,10 +10,7 @@ on:
 jobs:
   invite:
     runs-on: ubuntu-latest
-    if: |
-      github.event.pull_request.merged == true && 
-      github.repository == 'saitamau-maximum/members' && 
-      (startsWith(github.event.pull_request.title, '[入部届]') || startsWith(github.event.pull_request.title, '[継続届]'))
+    if: github.event.pull_request.merged == true && github.repository == 'saitamau-maximum/members'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,4 +22,4 @@ jobs:
           echo "Inviting to the organization"
           author=${{ steps.pr_author.outputs.AUTHOR }}
           gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
-          gh api --method PUT /orgs/saitamau-maximum/teams/2024/memberships/$AUTHOR --field role=member
+          gh org invite $author --role member
