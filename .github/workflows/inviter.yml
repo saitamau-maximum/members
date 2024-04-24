@@ -25,4 +25,4 @@ jobs:
           echo "Inviting to the organization"
           author=${{ steps.pr_author.outputs.AUTHOR }}
           gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
-          gh api --PUT https://api.github.com/orgs/saitamau-maximum/teams/2024/membership/$AUTHOR --field role=member
+          gh api --method PUT https://api.github.com/orgs/saitamau-maximum/teams/2024/membership/$AUTHOR --field role=member
