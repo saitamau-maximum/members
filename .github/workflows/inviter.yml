@@ -7,6 +7,9 @@ on:
     types:
       - closed
 
+env:
+  GH_TOKEN: ${{ github.token }}
+
 jobs:
   invite:
     runs-on: ubuntu-latest
@@ -24,5 +27,4 @@ jobs:
         run: |
           echo "Inviting to the organization"
           author=${{ steps.pr_author.outputs.AUTHOR }}
-          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
           gh api --method PUT /orgs/saitamau-maximum/teams/2024/memberships/$AUTHOR --field role=member
