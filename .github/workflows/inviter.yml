@@ -27,4 +27,4 @@ jobs:
         run: |
           echo "Inviting to the organization"
           author=${{ steps.pr_author.outputs.AUTHOR }}
-          gh api --method PUT /orgs/saitamau-maximum/teams/2024/memberships/$AUTHOR --field role=member
+          gh api --method PUT /orgs/saitamau-maximum/teams/2024/memberships/$author --field role=member
