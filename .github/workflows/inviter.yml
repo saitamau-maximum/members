@@ -1,0 +1,30 @@
+name: Invite New Members
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  invite:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.merged == true && 
+      github.repository == 'saitamau-maximum/members' && 
+      (startsWith(github.event.pull_request.title, '入部届') || startsWith(github.event.pull_request.title, '継続届'))
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get PR Author
+        id: pr_author
+        run: echo "AUTHOR=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
+      - name: Invite
+        run: |
+          echo "Inviting to the organization"
+          author=${{ steps.pr_author.outputs.AUTHOR }}
+          gh api --method PUT /orgs/saitamau-maximum/teams/2024/memberships/$author --field role=member

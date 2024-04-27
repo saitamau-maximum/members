@@ -1,0 +1,9 @@
+{
+  "$schema": "../members.schema.json",
+  "id": "167420900",
+  "name": "kntcky",
+  "grade": [
+    "24B"
+  ],
+  "isActive": true
+}
