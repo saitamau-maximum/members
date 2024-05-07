@@ -2,14 +2,14 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Maximum Members API",
-    "servers": [
-      {
-        "url": "https://saitamau-maximum.github.io/members"
-      }
-    ],
     "version": "1.0.0",
     "description": "This is a api server for Maximum members information"
   },
+  "servers": [
+    {
+      "url": "https://saitamau-maximum.github.io/members"
+    }
+  ],
   "paths": {
     "/": {
       "get": {
@@ -26,10 +26,23 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "integer"
+                        "type": "string",
+                        "example": "12345678"
                       },
                       "name": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "saitamau-maximum"
+                      },
+                      "grade": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["20B", "24M"]
+                      },
+                      "isActive": {
+                        "type": "boolean",
+                        "example": true
                       }
                     }
                   }
