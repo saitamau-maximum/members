@@ -1,6 +1,6 @@
 import { App } from 'octokit';
 
-export class GithubPullRequestRepository {
+export class GithubRepository {
 	readonly owner = 'saitamau-maximum';
 	readonly repo = 'members';
 	readonly octokit: App['octokit'];
@@ -54,5 +54,28 @@ export class GithubPullRequestRepository {
 			issue_number: this.issue_number,
 			title,
 		});
+	}
+
+	// Github Organization Teamにメンバーを招待する
+	async inviteToGithubOrganizationWithTeam(username: string, teamSlug: string) {
+		await this.octokit.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+			org: 'saitamau-maximum',
+			team_slug: teamSlug,
+			username,
+		});
+	}
+
+	// Github Organization Teamにメンバーが所属しているか確認する
+	async checkMembershipInGithubOrganizationTeam(username: string, teamSlug: string) {
+		try {
+			await this.octokit.request('GET /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+				org: 'saitamau-maximum',
+				team_slug: teamSlug,
+				username,
+			});
+			return true;
+		} catch (e) {
+			return false;
+		}
 	}
 }

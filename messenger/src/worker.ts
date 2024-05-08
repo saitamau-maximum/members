@@ -1,8 +1,11 @@
 import { App } from 'octokit';
 
 import type Env from './env';
-import { generateMessagesForContinuing, generateMessagesForNew } from './messages';
-import { GithubPullRequestRepository } from './repository';
+import { generateMessagesForContinuing, generateMessagesForInvite, generateMessagesForNew } from './messages';
+import { GithubRepository } from './repository';
+
+// 2024 は GitHub Organization のチームの Slug です。毎年変更する必要があります。
+const INVITE_TEAM = '2024';
 
 export default {
 	async fetch(request, env) {
@@ -33,24 +36,41 @@ export default {
 
 		app.webhooks.on('pull_request.opened', async ({ octokit, payload }) => {
 			const sender = payload.sender.login;
-			const prRepository = new GithubPullRequestRepository(octokit, payload.number);
+			const repo = new GithubRepository(octokit, payload.number);
 
-			const status = await prRepository.checkMemberStatus(sender);
+			const status = await repo.checkMemberStatus(sender);
 
 			if (status === 'newbie') {
 				// 新規入会者向けのタイトルに変更する
-				await prRepository.updatePullRequestTitle(`入部届: ${sender}`);
+				await repo.updatePullRequestTitle(`入部届: ${sender}`);
 				// 新規入会者向けメッセージを生成してコメントする
 				const messages = generateMessagesForNew(payload);
-				await prRepository.sendMessages(messages);
+				await repo.sendMessages(messages);
 			}
 
 			if (status === 'continuing') {
 				// 継続者向けのタイトルに変更する
-				await prRepository.updatePullRequestTitle(`継続届: ${sender}`);
+				await repo.updatePullRequestTitle(`継続届: ${sender}`);
 				// 継続者向けメッセージを生成してコメントする
 				const messages = generateMessagesForContinuing(payload);
-				await prRepository.sendMessages(messages);
+				await repo.sendMessages(messages);
+			}
+		});
+
+		app.webhooks.on('pull_request.closed', async ({ octokit, payload }) => {
+			if (!payload.pull_request.merged) return;
+			const sender = payload.pull_request.user.login;
+			const repo = new GithubRepository(octokit, payload.number);
+			const isTeamMember = await repo.checkMembershipInGithubOrganizationTeam(sender, INVITE_TEAM);
+
+			if (isTeamMember) return;
+
+			try {
+				await repo.inviteToGithubOrganizationWithTeam(sender, INVITE_TEAM);
+				const messages = generateMessagesForInvite(sender, INVITE_TEAM);
+				await repo.sendMessages(messages);
+			} catch (e) {
+				console.error(e);
 			}
 		});
 
