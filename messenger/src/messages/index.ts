@@ -13,4 +13,15 @@ const generateMessagesForNew = (webhook: PullRequestOpenedEvent) =>
 const generateMessagesForContinuing = (webhook: PullRequestOpenedEvent) =>
 	[message01forContinuing, message02forContinuing, message03forContinuing].map((f) => f(webhook));
 
-export { generateMessagesForNew, generateMessagesForContinuing };
+const generateMessagesForInvite = (sender: string, inviteTeam: string) => {
+	return [
+		`
+@${sender} さんを Maximum の GitHub Organization (Team: ${inviteTeam}) に招待しました！
+[通知一覧ページ](https://github.com/notifications) (右上のベルマーク) から通知を確認し、招待を受けてください。
+
+通知が届いていない場合は GitHub に登録したメールアドレスに招待が届いているか確認し、それでも招待が届いていない場合はここのコメントに書いてください！
+`.trim(),
+	];
+};
+
+export { generateMessagesForNew, generateMessagesForContinuing, generateMessagesForInvite };
