@@ -20,6 +20,9 @@ const generateMessagesForInvite = (sender: string, inviteTeam: string) => {
 [通知一覧ページ](https://github.com/notifications) (右上のベルマーク) から通知を確認し、招待を受けてください。
 
 通知が届いていない場合は GitHub に登録したメールアドレスに招待が届いているか確認し、それでも招待が届いていない場合はここのコメントに書いてください！
+
+招待を受けると、会員専用サイト [Members](https://members.maximum.vc/) にログインできるようになります。
+ここにDiscordの招待リンクがあるので、そちらからDiscordに参加してください！
 `.trim(),
 	];
 };
