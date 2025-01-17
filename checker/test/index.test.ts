@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 
-import { main } from "../src/main";
-import { ERRORS, WARN } from "../src/const";
+import { main } from "../src/main.js";
+import { ERRORS, WARN } from "../src/const.js";
 
 const cwd = process.cwd();
 

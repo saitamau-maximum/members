@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "rootDir": "./src",
     "outDir": "./dist",
     "removeComments": true,
@@ -10,5 +10,10 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true
   },
-  "exclude": ["node_modules", "dist", "test", "vitest.config.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "vitest.config.ts"
+  ]
 }

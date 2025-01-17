@@ -1,9 +1,9 @@
 import { App } from 'octokit';
 import type { EventPayloadMap } from '@octokit/webhooks-types';
 
-import type Env from './env';
-import { generateMessagesForContinuing, generateMessagesForInvite, generateMessagesForNew } from './messages';
-import { GithubRepository } from './repository';
+import type Env from './env.js';
+import { generateMessagesForContinuing, generateMessagesForInvite, generateMessagesForNew } from './messages/index.js';
+import { GithubRepository } from './repository.js';
 
 // 2024 は GitHub Organization のチームの Slug です。毎年変更する必要があります。
 const INVITE_TEAM = '2024';

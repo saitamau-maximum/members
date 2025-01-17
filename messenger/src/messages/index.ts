@@ -1,11 +1,11 @@
 import type { PullRequestOpenedEvent } from '@octokit/webhooks-types';
 
-import message01forNew from './new-members/01';
-import message02forNew from './new-members/02';
-import message03forNew from './new-members/03';
-import message01forContinuing from './continuing-members/01';
-import message02forContinuing from './continuing-members/02';
-import message03forContinuing from './continuing-members/03';
+import message01forNew from './new-members/01.js';
+import message02forNew from './new-members/02.js';
+import message03forNew from './new-members/03.js';
+import message01forContinuing from './continuing-members/01.js';
+import message02forContinuing from './continuing-members/02.js';
+import message03forContinuing from './continuing-members/03.js';
 
 const generateMessagesForNew = (webhook: PullRequestOpenedEvent) =>
   [message01forNew, message02forNew, message03forNew].map((f) => f(webhook));

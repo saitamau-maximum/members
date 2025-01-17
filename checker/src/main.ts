@@ -5,9 +5,9 @@ import picocolors from "picocolors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import * as logger from "./log";
-import schema from "./schema";
-import { ERRORS, INFO, WARN } from "./const";
+import * as logger from "./log.js";
+import schema from "./schema.js";
+import { ERRORS, INFO, WARN } from "./const.js";
 
 export async function main(
   cwd: string,
