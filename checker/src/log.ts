@@ -9,7 +9,7 @@ export const error = (...args: any[]) =>
 export const info = (...args: any[]) => console.info(bgBlue(" INFO "), ...args);
 
 let isVerbose = false;
-export const setVerbose = (verbose: boolean) => (isVerbose = verbose);
+export const setVerbose = (verbose: boolean) => { isVerbose = verbose; }
 
 export const debug = (...args: any[]) => {
   if (isVerbose) console.log(bgCyan(" DEBUG "), ...args);

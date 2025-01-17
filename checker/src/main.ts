@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, statSync } from "fs";
-import { resolve, sep } from "path";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { resolve, sep } from "node:path";
 
 import picocolors from "picocolors";
 import yargs from "yargs";
