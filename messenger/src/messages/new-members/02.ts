@@ -1,4 +1,4 @@
-import { PullRequestOpenedEvent } from '@octokit/webhooks-types';
+import type { PullRequestOpenedEvent } from '@octokit/webhooks-types';
 
 const message = (webhook: PullRequestOpenedEvent) => `
 @saitamau-maximum/leaders
