@@ -1,8 +1,8 @@
-const { resolve } = require("path")
-const { readdirSync, readFileSync, writeFileSync } = require("fs")
+import { readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { resolve } from "node:path"
 
 // members のディレクトリパス
-const membersDir = resolve(__dirname, "..", "data")
+const membersDir = resolve(import.meta.dirname, "..", "data")
 console.log(`Members' Data directory: ${membersDir}`)
 
 // members のディレクトリ内のファイル名を取得
@@ -32,10 +32,10 @@ for (const file of memberFiles) {
 
   // ファイルに書き込む
   const newMemberJsonContent = JSON.stringify(memberJson, null, 2)
-  console.log(`  Writing to file...`)
+  console.log("  Writing to file...")
   writeFileSync(filePath, newMemberJsonContent, "utf-8")
 
-  console.log(`  Done!`)
+  console.log("  Done!")
 }
 
 console.log("\nAll done!")
