@@ -5,3 +5,6 @@ env = { }
 
 [triggers]
 crons = [ ]
+
+[observability.logs]
+enabled = true
