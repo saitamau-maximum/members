@@ -14,8 +14,6 @@ const message = (webhook: PullRequestOpenedEvent) => `
 - [ ] サークル費の振り込みの確認 (saitamau-maximum/accountants が行う)
 - [ ] GitHub への招待
   Org -> Teams -> 年度のチーム -> Add a member
-- [ ] Discord への招待
-  コメントで行う、有効期限は 1 day, 1 use とすべき
 `;
 
 export default message;
