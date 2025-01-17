@@ -9,6 +9,8 @@ import * as logger from "./log.js";
 import schema from "./schema.js";
 import { ERRORS, INFO, WARN } from "./const.js";
 
+const __filename = import.meta.url;
+
 export async function main(
   cwd: string,
   argv: string[]
