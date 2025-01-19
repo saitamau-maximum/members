@@ -1,23 +1,23 @@
-import { PullRequestOpenedEvent } from '@octokit/webhooks-types';
+import type { PullRequestOpenedEvent } from '@octokit/webhooks-types';
 
 const message = (webhook: PullRequestOpenedEvent) => {
-	// JST 対応にするためちょっとめんどくさいことをしてる
-	const now_jst = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-	const month = parseInt(now_jst.split('/')[1], 10);
-	const remaining_month = 12 - ((month - 4 + 12) % 12);
-	// ↑
-	// 4 月: 12 - (4 - 4 + 12) % 12 = 12 - 0 = 12
-	// 5 月: 12 - (5 - 4 + 12) % 12 = 12 - 1 = 11
-	// ...
-	// 12 月: 12 - (12 - 4 + 12) % 12 = 12 - 8 = 4
-	// 1 月: 12 - (1 - 4 + 12) % 12 = 12 - 9 = 3
-	// 2 月: 12 - (2 - 4 + 12) % 12 = 12 - 10 = 2
-	// 3 月: 12 - (3 - 4 + 12) % 12 = 12 - 11 = 1
+  // JST 対応にするためちょっとめんどくさいことをしてる
+  const now_jst = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+  const month = Number.parseInt(now_jst.split('/')[1], 10);
+  const remaining_month = 12 - ((month - 4 + 12) % 12);
+  // ↑
+  // 4 月: 12 - (4 - 4 + 12) % 12 = 12 - 0 = 12
+  // 5 月: 12 - (5 - 4 + 12) % 12 = 12 - 1 = 11
+  // ...
+  // 12 月: 12 - (12 - 4 + 12) % 12 = 12 - 8 = 4
+  // 1 月: 12 - (1 - 4 + 12) % 12 = 12 - 9 = 3
+  // 2 月: 12 - (2 - 4 + 12) % 12 = 12 - 10 = 2
+  // 3 月: 12 - (3 - 4 + 12) % 12 = 12 - 11 = 1
 
-	// サークル費は 250 円/月
-	const cost = 250 * remaining_month;
+  // サークル費は 250 円/月
+  const cost = 250 * remaining_month;
 
-	return `こんにちは、 @${webhook.sender.login} さん！
+  return `こんにちは、 @${webhook.sender.login} さん！
 継続申請ありがとうございます！
 
 以下のリンクが継続者向けフォームとなります。

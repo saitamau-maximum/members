@@ -1,8 +1,9 @@
-import { dirname, join } from "path";
+import { exec } from "node:child_process";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import piko from "picocolors";
-import { mkdir, readFile, readdir, writeFile } from "fs/promises";
-import { exec } from "child_process";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -44,13 +45,13 @@ const main = async () => {
           const memberFile = join(membersDir, member);
           const memberInfoJSON = await readFile(memberFile);
           const memberInfo = JSON.parse(memberInfoJSON.toString());
-          delete memberInfo["$schema"];
+          memberInfo.$schema = undefined;
           return memberInfo;
         })
       )
     )
       .filter(Boolean)
-      .sort((a, b) => parseInt(a.id) - parseInt(b.id));
+      .sort((a, b) => Number.parseInt(a.id, 10) - Number.parseInt(b.id, 10));
     const membersInfoJSON = JSON.stringify(membersInfo);
     await writeFile(join(distDir, "index.json"), membersInfoJSON, "utf-8");
     console.log("Done.");

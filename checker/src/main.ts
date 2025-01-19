@@ -1,13 +1,15 @@
-import { existsSync, readFileSync, statSync } from "fs";
-import { resolve, sep } from "path";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { resolve, sep } from "node:path";
 
 import picocolors from "picocolors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import * as logger from "./log";
-import schema from "./schema";
-import { ERRORS, INFO, WARN } from "./const";
+import * as logger from "./log.js";
+import schema from "./schema.js";
+import { ERRORS, INFO, WARN } from "./const.js";
+
+const __filename = import.meta.url;
 
 export async function main(
   cwd: string,
