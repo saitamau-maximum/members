@@ -9,7 +9,8 @@ import * as logger from "./log.js";
 import schema from "./schema.js";
 import { ERRORS, INFO, WARN } from "./const.js";
 
-const __filename = import.meta.url;
+const __dirname = import.meta.dirname;
+// == /path/to/members-dir/checker/dist
 
 export async function main(
   cwd: string,
@@ -35,16 +36,16 @@ export async function main(
 
   logger.debug("files", files);
   logger.debug("cwd", cwd);
+  logger.debug("__dirname", __dirname)
   const correctSchemaPath = resolve(
-    __filename,
-    "..",
+    __dirname,
     "..",
     "..",
     "members.schema.json"
   );
   logger.debug("correctSchemaPath", correctSchemaPath);
 
-  const membersDir = resolve(__filename, "..", "..", "..", "data");
+  const membersDir = resolve(__dirname, "..", "..", "data");
   logger.debug("membersDir", membersDir);
 
   if (!files || files.length === 0) {
